@@ -10,7 +10,7 @@ from torch.distributed.algorithms._checkpoint.checkpoint_wrapper import Checkpoi
 import torch.nn as nn
 import torch.nn.functional as F
 
-from utils.parallel import (
+from ..utils.parallel import (
     all_to_all,
     gather_from_sequence_parallel_region,
     get_sequence_parallel_group,
