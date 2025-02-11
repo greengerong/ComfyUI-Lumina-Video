@@ -1,11 +1,7 @@
-from .nodes import LuminaVideoGenerator
+from .comfyui import NODE_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS
 
-NODE_CLASS_MAPPINGS = {
-    "LuminaVideoGenerator": LuminaVideoGenerator
-}
+NODE_CLASS_MAPPINGS = NODE_CLASS_MAPPINGS
 
-NODE_DISPLAY_NAME_MAPPINGS = {
-    "LuminaVideoGenerator": "Lumina Video Generator"
-}
+NODE_DISPLAY_NAME_MAPPINGS = NODE_DISPLAY_NAME_MAPPINGS
 
 __all__ = ['NODE_CLASS_MAPPINGS', 'NODE_DISPLAY_NAME_MAPPINGS']
