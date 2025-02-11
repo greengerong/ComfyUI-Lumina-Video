@@ -5,9 +5,8 @@ from datetime import datetime
 import imageio
 from torchvision.transforms.functional import to_pil_image
 
-from configs.sample import CANDIDATE_SAMPLE_CONFIGS
-# from .sample_configs import CANDIDATE_SAMPLE_CONFIGS
-from transport import Sampler, create_transport
+from ..configs.sample import CANDIDATE_SAMPLE_CONFIGS
+from ..transport import Sampler, create_transport
 
 DEFAULT_SYSTEM_PROMPT = "You are an assistant designed to generate high-quality videos with the highest degree of image-text alignment based on user prompts. <Prompt Start> "
 DEFAULT_PROMPT = "A large orange octopus is seen resting on the bottom of the ocean floor, blending in with the sandy and rocky terrain. Its tentacles are spread out around its body, and its eyes are closed. The octopus is unaware of a king crab that is crawling towards it from behind a rock, its claws raised and ready to attack. The crab is brown and spiny, with long legs and antennae. The scene is captured from a wide angle, showing the vastness and depth of the ocean. The water is clear and blue, with rays of sunlight filtering through. The shot is sharp and crisp, with a high dynamic range. The octopus and the crab are in focus, while the background is slightly blurred, creating a depth of field effect."  # noqa

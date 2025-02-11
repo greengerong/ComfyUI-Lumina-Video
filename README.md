@@ -1,4 +1,5 @@
-**!!!!!!WIP**
+**!!!!还是开发中，开发工作仍未完成！！！**
+
 # ComfyUI-Lumina-Video
 
 这是一个用于ComfyUI的基于 Lumina Video 模型的视频生成插件实现。

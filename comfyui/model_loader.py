@@ -47,12 +47,15 @@ class LuminaVideoModelLoader:
         
         # 如果本地不存在则下载模型
         if not os.path.exists(os.path.join(lumina_path, "model_args.pth")):
+            print(f"Downloading Lumina-Video model from {video_model_name} to {lumina_path}")
             snapshot_download(repo_id=video_model_name, local_dir=lumina_path)
             
         if not os.path.exists(text_encoder_local):
+            print(f"Downloading text encoder model from {text_encoder_name} to {text_encoder_local}")
             snapshot_download(repo_id=text_encoder_name, local_dir=text_encoder_local)
             
         if not os.path.exists(vae_local):
+            print(f"Downloading VAE model from {vae_model_name} to {vae_local}")
             snapshot_download(repo_id=vae_model_name, local_dir=vae_local)
         
         dtype = {"bf16": torch.bfloat16, "fp16": torch.float16, "fp32": torch.float32}[video_model_precision]

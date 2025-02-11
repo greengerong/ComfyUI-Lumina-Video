@@ -1,0 +1,7 @@
+META:
+  -
+    path: '/path/to/datasets/my_data1/UniMatch/record/record.jsonl'
+    type: 'video'
+  -
+    path: '/path/to/datasets/my_data2/UniMatch/record/record.jsonl'
+    type: 'video'

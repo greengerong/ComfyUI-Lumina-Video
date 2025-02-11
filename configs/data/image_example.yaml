@@ -1,0 +1,7 @@
+META:
+  -
+    path: '/path/to/my_image_data1.jsonl'
+    type: 'image_text'
+  -
+    path: '/path/to/my_image_data2.jsonl'
+    type: 'image_text'
