@@ -17,8 +17,9 @@ class LuminaVideoModelLoader:
                 "video_model_name": (["Alpha-VLLM/Lumina-Video-f24R960"], {
                     "default": "Alpha-VLLM/Lumina-Video-f24R960"
                 }),
-                "video_model_precision": (["bf16", "fp8", "int4"], {
-                    "default": "bf16"
+                "video_model_precision": (["bf16", "fp16", "fp32"], {
+                    "default": "bf16",
+                    "tooltip": "Video model precision: bf16 (default), fp16 (half), or fp32 (full)"
                 }),
                 "text_encoder_name": (["google/gemma-2-2b"], {
                     "default": "google/gemma-2-2b"
@@ -77,11 +78,12 @@ class LuminaVideoModelLoader:
         else:
             print(f"VAE model already exists in {vae_local}")
         
-        # 为video model选择精度:
-        # 当选择bf16时直接以bf16加载；若选择fp8或int4，则先以fp32加载，后续在编译中启用量化转换
+        # 为video model选择精度
         if video_model_precision == "bf16":
             dtype_video = torch.bfloat16
-        else:
+        elif video_model_precision == "fp16":
+            dtype_video = torch.float16
+        else:  # fp32
             dtype_video = torch.float32
         
         # 加载text encoder，固定使用bf16加载
@@ -148,5 +150,6 @@ class LuminaVideoModelLoader:
             mm.soft_empty_cache()
         except Exception as e:
             print(f"Error in unload_all_models() and soft_empty_cache(): {e}")
-
+        
+        print(f"LuminaVideoModelLoader finished!!!")
         return (model, vae, tokenizer, text_encoder)

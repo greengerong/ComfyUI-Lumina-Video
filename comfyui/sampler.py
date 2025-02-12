@@ -7,7 +7,6 @@ import imageio
 from torchvision.transforms.functional import to_pil_image
 import folder_paths
 import json
-import gc
 import comfy.model_management as mm
 
 from ..configs.sample import CANDIDATE_SAMPLE_CONFIGS
@@ -94,6 +93,8 @@ class LuminaVideoSampler:
     def generate(self, model, vae, tokenizer, text_encoder, prompt, negative_prompt, system_prompt, 
                 resolution_width, resolution_height, fps, frames, seed, sample_config):
         try:
+            mm.unload_all_models()
+            mm.soft_empty_cache()
             # 初始化分布式环境和序列并行组
             init_distributed()
             set_sequence_parallel(1)
@@ -170,13 +171,15 @@ class LuminaVideoSampler:
             latent_samples = {
                 "samples": (sample / factor).to(dtype=model_dtype)
             }
+
+            print(f"LuminaVideoSampler[DEBUG] latent_samples.shape[1]: {latent_samples['samples'].shape[1]}")
+            print(f"LuminaVideoSampler finished!!!")
             return (latent_samples, vae)
                 
         finally:
             # 清理所有缓存
+            mm.unload_all_models()
             torch.cuda.empty_cache()
-            if dist.is_initialized():
-                dist.destroy_process_group()
 
 def encode_prompt(prompt_batch, text_encoder, tokenizer):
     with torch.no_grad():
