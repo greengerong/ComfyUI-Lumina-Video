@@ -1,0 +1,360 @@
+{
+  "last_node_id": 22,
+  "last_link_id": 26,
+  "nodes": [
+    {
+      "id": 22,
+      "type": "LuminaVideoVAEDecode",
+      "pos": [
+        314.83111572265625,
+        720.4151000976562
+      ],
+      "size": [
+        359.1544189453125,
+        206.27894592285156
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 24,
+          "label": "samples"
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 25,
+          "label": "vae"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "links": [
+            26
+          ],
+          "slot_index": 0,
+          "label": "images"
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LuminaVideoVAEDecode"
+      },
+      "widgets_values": [
+        true,
+        240,
+        360,
+        0.2,
+        0.2,
+        true
+      ]
+    },
+    {
+      "id": 11,
+      "type": "LuminaVideoModelLoader",
+      "pos": [
+        -728.2333984375,
+        703.50341796875
+      ],
+      "size": [
+        401.3902893066406,
+        201.05796813964844
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "links": [
+            10
+          ],
+          "slot_index": 0,
+          "label": "model"
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "links": [
+            11
+          ],
+          "slot_index": 1,
+          "label": "vae"
+        },
+        {
+          "name": "tokenizer",
+          "type": "TOKENIZER",
+          "links": [
+            12
+          ],
+          "slot_index": 2,
+          "label": "tokenizer"
+        },
+        {
+          "name": "text_encoder",
+          "type": "TEXT_ENCODER",
+          "links": [
+            13
+          ],
+          "slot_index": 3,
+          "label": "text_encoder"
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LuminaVideoModelLoader"
+      },
+      "widgets_values": [
+        "Alpha-VLLM/Lumina-Video-f24R960",
+        "fp16",
+        "google/gemma-2-2b",
+        "THUDM/CogVideoX-2b"
+      ]
+    },
+    {
+      "id": 21,
+      "type": "VHS_VideoCombine",
+      "pos": [
+        750.0022583007812,
+        713.7825927734375
+      ],
+      "size": [
+        428.3721008300781,
+        579.2325439453125
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 26,
+          "label": "图像"
+        },
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": null,
+          "shape": 7,
+          "label": "音频"
+        },
+        {
+          "name": "meta_batch",
+          "type": "VHS_BatchManager",
+          "link": null,
+          "shape": 7,
+          "label": "批次管理"
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": null,
+          "shape": 7,
+          "label": "vae"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Filenames",
+          "type": "VHS_FILENAMES",
+          "links": null,
+          "label": "文件名"
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VHS_VideoCombine",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65
+      },
+      "widgets_values": {
+        "frame_rate": 24,
+        "loop_count": 0,
+        "filename_prefix": "lumina-video",
+        "format": "video/h264-mp4",
+        "pix_fmt": "yuv420p",
+        "crf": 19,
+        "save_metadata": false,
+        "pingpong": false,
+        "save_output": true,
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "filename": "lumina-video_00003.mp4",
+            "subfolder": "",
+            "type": "output",
+            "format": "video/h264-mp4",
+            "frame_rate": 24
+          },
+          "muted": false
+        }
+      }
+    },
+    {
+      "id": 10,
+      "type": "LuminaVideoSampler",
+      "pos": [
+        -243.065673828125,
+        639.9202880859375
+      ],
+      "size": [
+        490.5368957519531,
+        557.4291381835938
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 10,
+          "label": "model"
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 11,
+          "label": "vae"
+        },
+        {
+          "name": "tokenizer",
+          "type": "TOKENIZER",
+          "link": 12,
+          "label": "tokenizer"
+        },
+        {
+          "name": "text_encoder",
+          "type": "TEXT_ENCODER",
+          "link": 13,
+          "label": "text_encoder"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "links": [
+            24
+          ],
+          "slot_index": 0,
+          "label": "samples"
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "links": [
+            25
+          ],
+          "slot_index": 1,
+          "label": "vae"
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LuminaVideoSampler"
+      },
+      "widgets_values": [
+        "A large orange octopus is seen resting on the bottom of the ocean floor, blending in with the sandy and rocky terrain. Its tentacles are spread out around its body, and its eyes are closed. The octopus is unaware of a king crab that is crawling towards it from behind a rock, its claws raised and ready to attack. The crab is brown and spiny, with long legs and antennae. The scene is captured from a wide angle, showing the vastness and depth of the ocean. The water is clear and blue, with rays of sunlight filtering through. The shot is sharp and crisp, with a high dynamic range. The octopus and the crab are in focus, while the background is slightly blurred, creating a depth of field effect.",
+        "",
+        "You are an assistant designed to generate high-quality videos with the highest degree of image-text alignment based on user prompts. <Prompt Start> ",
+        512,
+        320,
+        24,
+        96,
+        1540,
+        "randomize",
+        "f24F96R960",
+        true,
+        true,
+        true
+      ]
+    }
+  ],
+  "links": [
+    [
+      10,
+      11,
+      0,
+      10,
+      0,
+      "MODEL"
+    ],
+    [
+      11,
+      11,
+      1,
+      10,
+      1,
+      "VAE"
+    ],
+    [
+      12,
+      11,
+      2,
+      10,
+      2,
+      "TOKENIZER"
+    ],
+    [
+      13,
+      11,
+      3,
+      10,
+      3,
+      "TEXT_ENCODER"
+    ],
+    [
+      24,
+      10,
+      0,
+      22,
+      0,
+      "LATENT"
+    ],
+    [
+      25,
+      10,
+      1,
+      22,
+      1,
+      "VAE"
+    ],
+    [
+      26,
+      22,
+      0,
+      21,
+      0,
+      "IMAGE"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.6588450000000002,
+      "offset": {
+        "0": 1509.896484375,
+        "1": -221.66285705566406
+      }
+    },
+    "workspace_info": {
+      "id": "VGcD9xPiT4GxwjO4h9-Nt",
+      "saveLock": false,
+      "cloudID": null,
+      "coverMediaPath": null
+    }
+  },
+  "version": 0.4
+}

@@ -130,8 +130,7 @@ class LuminaVideoVAEDecode:
 
             video = video_processor.postprocess_video(video=frames, output_type="pt")
             print(f"LuminaVideoVAEDecode[DEBUG] Post-processed video shape: {video.shape}")
-            # video = video[0].permute(0, 2, 3, 1).cpu().float()
-            video = video[0].cpu().float()
+            video = video[0].permute(0, 2, 3, 1).cpu().float()
             print(f"LuminaVideoVAEDecode[DEBUG] Final video shape: {video.shape}")
 
             return (video,)
