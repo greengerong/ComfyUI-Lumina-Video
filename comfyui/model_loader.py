@@ -7,6 +7,7 @@ from diffusers.models import AutoencoderKLCogVideoX
 from ..models import MultiScaleNextDiT_2B_GQA
 import folder_paths
 import json
+import gc
 class LuminaVideoModelLoader:
     @classmethod
     def INPUT_TYPES(s):
@@ -122,5 +123,10 @@ class LuminaVideoModelLoader:
         new_ckpt = {key.replace("_orig_mod.", ""): val for key, val in ckpt.items()}
         model.load_state_dict(new_ckpt, strict=True)
         model.my_compile()
-        
+        try:
+            gc.collect()
+            torch.cuda.empty_cache()
+        except Exception as e:
+            print(f"Error in gc.collect() and torch.cuda.empty_cache(): {e}")
+
         return (model, vae, tokenizer, text_encoder)
