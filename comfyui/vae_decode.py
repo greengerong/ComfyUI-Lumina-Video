@@ -40,6 +40,7 @@ class LuminaVideoVAEDecode:
         }
     
     RETURN_TYPES = ("IMAGE",)
+    RETURN_NAMES = ("IMAGE")
     FUNCTION = "decode"
     CATEGORY = "Lumina-Video"
 
