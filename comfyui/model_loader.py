@@ -7,7 +7,8 @@ from diffusers.models import AutoencoderKLCogVideoX
 from ..models import MultiScaleNextDiT_2B_GQA
 import folder_paths
 import json
-import gc
+import comfy.model_management as mm
+
 class LuminaVideoModelLoader:
     @classmethod
     def INPUT_TYPES(s):
@@ -16,7 +17,7 @@ class LuminaVideoModelLoader:
                 "video_model_name": (["Alpha-VLLM/Lumina-Video-f24R960"], {
                     "default": "Alpha-VLLM/Lumina-Video-f24R960"
                 }),
-                "video_model_precision": (["bf16", "fp16", "fp32"], {
+                "video_model_precision": (["bf16", "fp8", "int4"], {
                     "default": "bf16"
                 }),
                 "text_encoder_name": (["google/gemma-2-2b"], {
@@ -34,6 +35,13 @@ class LuminaVideoModelLoader:
     CATEGORY = "Lumina-Video"
 
     def load_models(self, video_model_name, video_model_precision, text_encoder_name, vae_model_name):
+        # 在加载新模型之前先清理已加载的模型与缓存，以释放GPU内存
+        try:
+            mm.unload_all_models()
+            mm.soft_empty_cache()
+        except Exception as e:
+            print(f"清理显存时出现错误: {e}")
+            
         # 设置ComfyUI根目录下的models模型路径
         base_path = folder_paths.base_path
         lumina_path = os.path.join(base_path, "models", "Lumina-Video")
@@ -65,16 +73,21 @@ class LuminaVideoModelLoader:
             
         if not os.path.exists(vae_local):
             print(f"Downloading VAE model from {vae_model_name} to {vae_local}")
-            snapshot_download(repo_id=vae_model_name, local_dir=vae_local, resume_download=True)
+            snapshot_download(repo_id=vae_model_name, local_dir=vae_local, resume_download=True, allow_patterns=["vae/**"])
         else:
             print(f"VAE model already exists in {vae_local}")
         
-        dtype = {"bf16": torch.bfloat16, "fp16": torch.float16, "fp32": torch.float32}[video_model_precision]
+        # 为video model选择精度:
+        # 当选择bf16时直接以bf16加载；若选择fp8或int4，则先以fp32加载，后续在编译中启用量化转换
+        if video_model_precision == "bf16":
+            dtype_video = torch.bfloat16
+        else:
+            dtype_video = torch.float32
         
-        # 加载text encoder
+        # 加载text encoder，固定使用bf16加载
         text_encoder = AutoModel.from_pretrained(
             text_encoder_local, 
-            torch_dtype=dtype,
+            torch_dtype=torch.bfloat16,
             device_map="cuda",
         ).eval()
         
@@ -85,13 +98,14 @@ class LuminaVideoModelLoader:
         tokenizer.padding_side = "right"
         print(f"load tokenizer model finished")
         
-        # 加载VAE
+        # 加载VAE，固定使用bf16加载
         vae = AutoencoderKLCogVideoX.from_pretrained(
             vae_local,
             subfolder="vae",
-            torch_dtype=dtype,
+            torch_dtype=torch.bfloat16,
         ).cuda()
         print(f"load vae model finished")
+        
         # 加载主模型
         train_args = torch.load(os.path.join(video_local, "model_args.pth"))
         print(f"load model arguments: {json.dumps(train_args.__dict__, indent=2)}")
@@ -110,7 +124,8 @@ class LuminaVideoModelLoader:
             )
         else:
             raise ValueError(f"Unknown model type: {train_args.model}")
-        model.eval().to("cuda", dtype=dtype)
+        
+        model.eval().to("cuda", dtype=dtype_video)
         
         # 加载权重
         ckpt_path = os.path.join(video_local, "consolidated.00-of-01.safetensors")
@@ -122,11 +137,16 @@ class LuminaVideoModelLoader:
             
         new_ckpt = {key.replace("_orig_mod.", ""): val for key, val in ckpt.items()}
         model.load_state_dict(new_ckpt, strict=True)
+        
+        # 如果选择更低精度的加载(fp8或int4)，在编译前传递量化模式给模型
+        if video_model_precision in ("fp8", "int4"):
+            model.quantization_mode = video_model_precision
+        
         model.my_compile()
         try:
-            gc.collect()
-            torch.cuda.empty_cache()
+            mm.unload_all_models()
+            mm.soft_empty_cache()
         except Exception as e:
-            print(f"Error in gc.collect() and torch.cuda.empty_cache(): {e}")
+            print(f"Error in unload_all_models() and soft_empty_cache(): {e}")
 
         return (model, vae, tokenizer, text_encoder)
