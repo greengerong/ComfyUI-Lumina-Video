@@ -60,12 +60,16 @@ class LuminaVideoSampler:
                     "multiline": True
                 }),
                 "resolution_width": ("INT", {
-                    "default": 1248, 
-                    "step": 8
+                    "default": 704, 
+                    "step": 32,
+                    "min": 32,
+                    "tooltip": "Width must be divisible by 32"
                 }),
                 "resolution_height": ("INT", {
-                    "default": 704, 
-                    "step": 8
+                    "default": 480, 
+                    "step": 32,
+                    "min": 32,
+                    "tooltip": "Height must be divisible by 32"
                 }),
                 "fps": ("INT", {
                     "default": 24, 
@@ -93,6 +97,12 @@ class LuminaVideoSampler:
     def generate(self, model, vae, tokenizer, text_encoder, prompt, negative_prompt, system_prompt, 
                 resolution_width, resolution_height, fps, frames, seed, sample_config):
         try:
+            # 验证分辨率能够被32整除
+            if resolution_width % 32 != 0:
+                raise ValueError(f"Resolution width ({resolution_width}) must be divisible by 32")
+            if resolution_height % 32 != 0:
+                raise ValueError(f"Resolution height ({resolution_height}) must be divisible by 32")            
+            
             mm.unload_all_models()
             mm.soft_empty_cache()
             # 初始化分布式环境和序列并行组

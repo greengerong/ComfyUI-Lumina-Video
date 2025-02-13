@@ -55,7 +55,6 @@ class LuminaVideoVAEDecode:
                tile_overlap_factor_height, tile_overlap_factor_width, auto_tile_size=True):
         """使用 VAE 解码 latent samples"""
         try:
-            mm.unload_all_models()
             mm.soft_empty_cache()
             print(f"LuminaVideoVAEDecode[INFO] Starting VAE decode process. enable_vae_tiling= {enable_vae_tiling}, auto_tile_size= {auto_tile_size}")
             device = mm.get_torch_device()
@@ -137,7 +136,8 @@ class LuminaVideoVAEDecode:
             
         except Exception as e:
             print(f"LuminaVideoVAEDecode[ERROR] VAE decode failed: {e}")
-            raise e
-        finally:
             mm.unload_all_models()
             mm.soft_empty_cache()
+            raise e
+        finally:
+             pass
