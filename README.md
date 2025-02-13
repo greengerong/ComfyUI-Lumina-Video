@@ -30,7 +30,7 @@ pip install -r requirements.txt
 ## 使用方法
 工作流见[./comfyui/workflows/Lumina-Video.json](./comfyui/workflows/Lumina-Video.json)
 
-![工作流](./comfyui/workflows/demo1.png?raw=true)
+![工作流](./comfyui/workflows/demo1.jpg)
 
 ## 联系我
 ![](./comfyui/workflows/logo.jpg)
