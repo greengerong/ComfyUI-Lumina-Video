@@ -14,7 +14,7 @@
 
 ## 安装方法
 
-1. 确保已安装 ComfyUI
+1. 确保已安装 ComfyUI。（仅在linux 24GPU测试，估算16G可运行；欢迎issue反馈或pull request）
 2. 克隆本仓库到 ComfyUI 的 custom_nodes 目录：
 ```bash
 cd ComfyUI/custom_nodes
