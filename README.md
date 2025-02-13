@@ -34,7 +34,8 @@ pip install -r requirements.txt
 
 
 ## 联系我
-![](./comfyui/workflows/logo.jpg)
+
+![logo](https://github.com/user-attachments/assets/2b292623-df54-492d-950a-0ae6be8acb34)
 
 ## 致谢
 
