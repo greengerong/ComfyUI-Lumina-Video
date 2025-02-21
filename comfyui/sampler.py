@@ -22,8 +22,8 @@ def init_distributed():
         os.environ['LOCAL_RANK'] = '0'
         
         dist.init_process_group(
-            backend='nccl' if torch.cuda.is_available() else 'gloo',
-            init_method='env://',
+            backend = "gloo" if os.name == "nt" or not torch.cuda.is_available() else "nccl",
+            init_method="env://?use_libuv=False",
             world_size=1,
             rank=0
         )
