@@ -1,0 +1,15 @@
+[project]
+name = "lumina-video"
+description = "This is a video generation plugin implementation for ComfyUI based on the Lumina Video model."
+version = "1.0.0"
+license = {file = "LICENSE"}
+dependencies = ["# torch==2.5.1", "# torchvision==0.20.1", "# torchaudio==2.5.1", "# torchdiffeq==0.2.5", "torch", "torchvision", "torchaudio", "torchdiffeq", "pandas", "wandb", "fairscale", "gradio", "packaging", "# transformers==4.43.3", "# diffusers==0.30.2", "transformers", "diffusers", "accelerate", "pyyaml", "pathlib", "Ninja", "bitsandbytes", "httpx[socks]", "einops", "regex", "h5py", "pre-commit", "# comfyui新增", "safetensors", "huggingface_hub", "imageio", "numpy"]
+
+[project.urls]
+Repository = "https://github.com/greengerong/ComfyUI-Lumina-Video"
+#  Used by Comfy Registry https://comfyregistry.org
+
+[tool.comfy]
+PublisherId = ""
+DisplayName = "ComfyUI-Lumina-Video"
+Icon = ""
