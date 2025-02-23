@@ -27,6 +27,7 @@ def init_distributed():
             world_size=1,
             rank=0
         )
+        # dist.destroy_process_group()
         
         # 创建序列并行组
         ranks = list(range(dist.get_world_size()))
