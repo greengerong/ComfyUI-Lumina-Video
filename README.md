@@ -35,10 +35,6 @@ pip install -r requirements.txt
 <img width="1012" alt="demo" src="https://github.com/user-attachments/assets/79274471-77c2-4e13-bdd8-895c2f1a0b80" />
 
 
-## 联系我
-
-![logo](https://github.com/user-attachments/assets/2b292623-df54-492d-950a-0ae6be8acb34)
-
 ## 致谢
 
 - [Lumina Video](https://github.com/Alpha-VLLM/Lumina-Video)
