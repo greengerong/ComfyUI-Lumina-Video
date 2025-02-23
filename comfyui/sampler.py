@@ -13,14 +13,14 @@ from ..configs.sample import CANDIDATE_SAMPLE_CONFIGS
 from ..transport import Sampler, create_transport
 from ..utils.parallel import find_free_port, set_sequence_parallel
 
+os.environ['MASTER_ADDR'] = '127.0.0.1'
+os.environ['MASTER_PORT'] = str(find_free_port(10000, 55555))
+os.environ['WORLD_SIZE'] = '1'
+os.environ['RANK'] = '0'
+os.environ['LOCAL_RANK'] = '0'
+
 def init_distributed():
     if not dist.is_initialized():
-        os.environ['MASTER_ADDR'] = '127.0.0.1'
-        os.environ['MASTER_PORT'] = str(find_free_port(10000, 11000))
-        os.environ['WORLD_SIZE'] = '1'
-        os.environ['RANK'] = '0'
-        os.environ['LOCAL_RANK'] = '0'
-        
         dist.init_process_group(
             backend = "gloo" if os.name == "nt" or not torch.cuda.is_available() else "nccl",
             init_method="env://?use_libuv=False",
